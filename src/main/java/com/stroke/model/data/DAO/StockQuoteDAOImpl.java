@@ -4,11 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 
-import com.stroke.model.Stock;
+import org.springframework.stereotype.Service;
+
 import com.stroke.model.StockQuote;
 
+@Service
 public class StockQuoteDAOImpl implements StockQuoteDAO{
 
 	public void insertStockQuote(StockQuote stockQuote) {
@@ -61,21 +64,41 @@ public class StockQuoteDAOImpl implements StockQuoteDAO{
 		return stockQuote;
 	}
 	
-	
-	
 
-	
 
 	public List<StockQuote> getStockQuotes(String symbol,
 			GregorianCalendar fromDate, GregorianCalendar toDate) {
-		// TODO Auto-generated method stub
-		return null;
+		List<StockQuote> stocksList = new LinkedList<StockQuote>();
+		DBConnection conn = DBConnection.getDbCon();
+		String selectQuery = "select * from historical_data where symbol = '"
+				+ symbol + "' and date >='" + getStringFromDate(fromDate)
+				+ "' and date <='" + getStringFromDate(toDate) + "';";
+		try {
+			ResultSet rs = conn.query(selectQuery);
+			while (rs.next()) {
+				StockQuote quote = new StockQuote();
+				quote.setSymbol(rs.getString("Symbol"));
+				quote.setDate(getDateFromString(rs.getString("date")));
+				quote.setOpenPrice(rs.getDouble("openPrice"));
+				quote.setClosePrice(rs.getDouble("closePrice"));
+				quote.setDayHigh(rs.getDouble("dayHigh"));
+				quote.setDayLow(rs.getDouble("dayLow"));
+				quote.setVolume(rs.getInt("volume"));
+				quote.setAdjClose(rs.getDouble("adjClose"));
+				stocksList.add(quote);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return stocksList;
 	}
 
 	
 	public static String getStringFromDate(GregorianCalendar date){
+		int month = date.get(Calendar.MONTH)+1;
 		String result =  date.get(Calendar.YEAR) + "-"
-				+ (date.get(Calendar.MONTH)) + "-"
+				+  month + "-"
 				+ date.get(Calendar.DAY_OF_MONTH);
 		return result;
 	}
@@ -84,7 +107,7 @@ public class StockQuoteDAOImpl implements StockQuoteDAO{
 		String[] dateParts = date.split("-");
 		GregorianCalendar returnedDate = new GregorianCalendar(
 				Integer.parseInt(dateParts[0]),
-				Integer.parseInt(dateParts[1]),
+				Integer.parseInt(dateParts[1])-1,
 				Integer.parseInt(dateParts[2]));
 		return returnedDate;
 	}

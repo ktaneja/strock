@@ -107,7 +107,7 @@ public class StockQuote {
 				+ ", openPrice : " + this.getOpenPrice() + ", closePrice : "
 				+ this.getClosePrice() + ", dayHigh : " + this.getDayHigh()
 				+ ", dayLow : " + this.getDayLow() + ", volume : "
-				+ this.getVolume() + ", adjClose" + this.getAdjClose();
+				+ this.getVolume() + ", adjClose : " + this.getAdjClose();
 		return resultSet;
 	}
 }

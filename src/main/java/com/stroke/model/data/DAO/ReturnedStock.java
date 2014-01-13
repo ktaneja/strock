@@ -23,12 +23,25 @@ public class ReturnedStock {
 				+ "summaryURL : http://www.nasdaq.com/symbol/aapl");
 	}
 	
-	@Test
+	/*@Test
 	public void test2() {
 		StockQuoteDAOImpl stockQuote = new StockQuoteDAOImpl();
-		StockQuote returnedStock = stockQuote.getStockQuote("AAPL", new GregorianCalendar(2008, 04, 02));
-		System.out.println(returnedStock.toString());
-		
+		StockQuote returnedStock = stockQuote.getStockQuote("AAPL",
+				new GregorianCalendar(2008, 04, 02));
+		//System.out.println(returnedStock.toString());
+		Assert.assertEquals(
+				returnedStock.toString(),
+				"symbol : AAPL, date : 2008-4-2, openPrice : 148.78, closePrice : 151.2, "
+				+ "dayHigh : 145.85, dayLow : 147.49, volume : 37320300, adjClose : 142.61");
+	}*/
 	
-}
+	@Test
+	public void test3() {
+		StockQuoteDAOImpl stockQuote = new StockQuoteDAOImpl();
+		List<StockQuote> returnedList = stockQuote.getStockQuotes("AAPL", new GregorianCalendar(2008, 2, 02), new GregorianCalendar(2008, 3, 02));
+		for (StockQuote returnedStock : returnedList) {
+			System.out.println(returnedStock.toString());	
+		}		
+	}
+	
 }

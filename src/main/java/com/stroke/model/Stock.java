@@ -10,6 +10,10 @@ public class Stock {
 	private String industry;
 	private String summaryURL;
 	
+	public Stock(){
+
+	}
+	
 	public Stock(String symbol, String name, String marketCap, String IPOyear,
 	String sector, String industry, String summaryURL){
 		this.symbol = symbol;
@@ -79,4 +83,12 @@ public class Stock {
 		this.summaryURL = summaryURL;
 	}
 	
+	public String toString() {
+		String resultSet = "symbol : " + this.getSymbol() + ", name : "
+				+ this.getName() + ", marketCap : " + this.getMarketCap()
+				+ ", IPOyear : " + this.getIPOyear() + ", sector : "
+				+ this.getSector() + ", industry : " + this.getIndustry()
+				+ ", summaryURL : " + this.getSummaryURL();
+		return resultSet;
+	}
 }

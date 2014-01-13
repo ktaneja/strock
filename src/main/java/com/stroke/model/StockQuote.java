@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import com.stroke.model.data.DAO.StockQuoteDAOImpl;
+
 public class StockQuote {
 	
 	private String symbol;
@@ -16,6 +18,10 @@ public class StockQuote {
 	private double dayLow;
 	private int volume;
 	private double adjClose;
+	
+	public StockQuote(){
+		
+	}
 	
 	public StockQuote(String symbol, GregorianCalendar date,
 			double openPrice, double closePrice, double dayHigh,
@@ -95,5 +101,13 @@ public class StockQuote {
 		this.adjClose = adjClose;
 	}
 	
-	
+	public String toString() {
+		String resultSet = "symbol : " + this.getSymbol() + ", date : "
+				+ StockQuoteDAOImpl.getStringFromDate(this.getDate())
+				+ ", openPrice : " + this.getOpenPrice() + ", closePrice : "
+				+ this.getClosePrice() + ", dayHigh : " + this.getDayHigh()
+				+ ", dayLow : " + this.getDayLow() + ", volume : "
+				+ this.getVolume() + ", adjClose" + this.getAdjClose();
+		return resultSet;
+	}
 }

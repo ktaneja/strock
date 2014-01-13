@@ -1,5 +1,6 @@
 package com.stroke.model.data.DAO;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.stroke.model.Stock;
@@ -32,9 +33,26 @@ public class StockDAOImpl implements StockDAO{
 		}
 	}
 
-	public Stock getStockBySymbol(String symbol) {
-		// TODO Auto-generated method stub
-		return null;
+public Stock getStockBySymbol(String symbol) {
+		Stock stock = new Stock();
+		DBConnection conn = DBConnection.getDbCon();
+		String selectQuery = "select * from stock where symbol = '" + symbol + "';";	
+		try {
+			ResultSet	rs = conn.query(selectQuery);
+			while(rs.next()){			
+				stock.setSymbol(rs.getString("Symbol"));
+				stock.setName(rs.getString("name"));
+				stock.setMarketCap(rs.getString("marketCap"));
+				stock.setIPOyear(rs.getString("IPOyear"));
+				stock.setSector(rs.getString("sector"));
+				stock.setIndustry(rs.getString("industry"));
+				stock.setSummaryURL(rs.getString("summaryURL"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return stock;
 	}
 
 }

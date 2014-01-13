@@ -3,8 +3,11 @@ package com.stroke.model.data.DAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Service;
+
 import com.stroke.model.Stock;
 
+@Service
 public class StockDAOImpl implements StockDAO{
 
 	public void insertStock(Stock stock) {

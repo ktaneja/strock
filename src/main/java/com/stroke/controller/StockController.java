@@ -11,14 +11,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.stroke.model.Stock;
 import com.stroke.model.StockQuote;
+import com.stroke.model.data.DAO.StockDAO;
+import com.stroke.model.data.DAO.StockQuoteDAO;
 
 @Controller
 public class StockController {
 	
+	StockQuoteDAO quoteService;
+	StockDAO stockService;
 	
-	//@Autowired
-	public StockController(){
-		
+	@Autowired
+	public StockController(StockDAO stockDAO, StockQuoteDAO quoteDAO){
+		this.stockService = stockDAO;
+		this.quoteService = quoteDAO;
 	}
 	
 	@RequestMapping("quote/{symbol}")
@@ -31,7 +36,7 @@ public class StockController {
 	@RequestMapping("stock/{symbol}")
     @ResponseBody
 	public Stock getStockDetails(@PathVariable String symbol){
-		Stock stock = new Stock(symbol, "", "", "", "", "", "");
+		Stock stock = stockService.getStockBySymbol(symbol);
 		return stock;
 	}
 

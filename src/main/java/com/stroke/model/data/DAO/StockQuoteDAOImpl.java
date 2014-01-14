@@ -58,7 +58,6 @@ public class StockQuoteDAOImpl implements StockQuoteDAO{
 				stockQuote.setAdjClose(rs.getDouble("adjClose"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return stockQuote;
@@ -88,12 +87,42 @@ public class StockQuoteDAOImpl implements StockQuoteDAO{
 				stocksList.add(quote);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return stocksList;
 	}
 
+	public boolean isStockQuoteInsertedInDB(String symbol){
+		String query = "Select count(*) as count from historical_data where symbol = '" + symbol +"'";
+		DBConnection conn = DBConnection.getDbCon();
+		try {
+			ResultSet rs = conn.query(query);
+			if(rs.next()){
+				if(rs.getInt("count") > 0)
+					return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+
+	}
+	
+	public GregorianCalendar getLatestDateInserted(String symbol){
+		DBConnection conn = DBConnection.getDbCon();
+		String query = "Select max(date) as maxdate from historical_data where symbol = '" + symbol +"'";
+		try {
+			ResultSet rs = conn.query(query);
+			if(rs.next()){
+				if(rs.getString("maxdate") != null)
+					return getDateFromString(rs.getString("maxdate"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	public static String getStringFromDate(GregorianCalendar date){
 		int month = date.get(Calendar.MONTH)+1;

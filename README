@@ -1,0 +1,10 @@
+TODO:
+* Calculate technical Indicators and insert in database. Some of the indicators are:
+
+1. SMA (50, 100, 200 days)
+2. Bollinger bands
+3. Stochastic
+
+* Write a Stock Simulator and a back-testing API to test strategies based on technical indicators
+* Develop mobile apps that can send push notification whenever a stock breaks out.
+

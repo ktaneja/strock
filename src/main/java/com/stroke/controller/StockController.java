@@ -1,6 +1,6 @@
 package com.stroke.controller;
 
-import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +13,7 @@ import com.stroke.model.Stock;
 import com.stroke.model.StockQuote;
 import com.stroke.model.data.DAO.StockDAO;
 import com.stroke.model.data.DAO.StockQuoteDAO;
+import com.stroke.model.data.DAO.StockQuoteDAOImpl;
 
 @Controller
 public class StockController {
@@ -28,8 +29,9 @@ public class StockController {
 	
 	@RequestMapping("quote/{symbol}")
     @ResponseBody
-	public StockQuote getQuote(@PathVariable String symbol, @RequestParam int from, @RequestParam(required = false) String to){
-		StockQuote quote = new StockQuote(symbol, new GregorianCalendar(), from,5,5,5,5,5);
+	public List<StockQuote> getQuote(@PathVariable String symbol, @RequestParam String from, @RequestParam(required = false) String to){
+		List<StockQuote>  quote = quoteService.getStockQuotes(symbol, 
+				StockQuoteDAOImpl.getDateFromString(from), StockQuoteDAOImpl.getDateFromString(to));
 		return quote;
 	}
 	

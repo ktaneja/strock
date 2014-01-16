@@ -10,10 +10,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 @EnableScheduling
 public class DownloadDataScheduledTasks {
 
-
-    @Scheduled(cron="0 03 22 * * *")
-    public void reportCurrentTime() throws IOException {
-        System.out.println("Executing....");
+	/*
+	 * Download Stock data every night at 10 PM
+	 */
+    @Scheduled(cron="0 51 22 * * *")
+    public void downloadStockData() throws IOException {
+        System.out.println("Downloading Stock Quotes....");
     	DownloadData.main(null);
     }
 }

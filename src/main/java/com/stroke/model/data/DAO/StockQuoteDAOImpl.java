@@ -67,11 +67,18 @@ public class StockQuoteDAOImpl implements StockQuoteDAO{
 
 	public List<StockQuote> getStockQuotes(String symbol,
 			GregorianCalendar fromDate, GregorianCalendar toDate) {
+		
+		return getStockQuotes(symbol, getStringFromDate(fromDate), getStringFromDate(toDate));
+	}
+	
+	public List<StockQuote> getStockQuotes(String symbol,
+			String fromDate, String toDate) {
 		List<StockQuote> stocksList = new LinkedList<StockQuote>();
-		DBConnection conn = DBConnection.getDbCon();
 		String selectQuery = "select * from historical_data where symbol = '"
-				+ symbol + "' and date >='" + getStringFromDate(fromDate)
-				+ "' and date <='" + getStringFromDate(toDate) + "';";
+				+ symbol + "' and date >='" + fromDate
+				+ "' and date <='" + toDate + "';";
+		DBConnection conn = DBConnection.getDbCon();
+		
 		try {
 			ResultSet rs = conn.query(selectQuery);
 			while (rs.next()) {
@@ -91,6 +98,7 @@ public class StockQuoteDAOImpl implements StockQuoteDAO{
 		}
 		return stocksList;
 	}
+	
 
 	public boolean isStockQuoteInsertedInDB(String symbol){
 		String query = "Select count(*) as count from historical_data where symbol = '" + symbol +"'";
@@ -132,12 +140,41 @@ public class StockQuoteDAOImpl implements StockQuoteDAO{
 		return result;
 	}
 	
-	public GregorianCalendar getDateFromString(String date) {
+	public static GregorianCalendar getDateFromString(String date) {
 		String[] dateParts = date.split("-");
 		GregorianCalendar returnedDate = new GregorianCalendar(
 				Integer.parseInt(dateParts[0]),
 				Integer.parseInt(dateParts[1])-1,
 				Integer.parseInt(dateParts[2]));
 		return returnedDate;
+	}
+
+
+
+	@Override
+	public List<StockQuote> getAllStockQuotes(String symbol) {
+		List<StockQuote> stocksList = new LinkedList<StockQuote>();
+		String selectQuery = "select * from historical_data where symbol = '"
+				+ symbol + "';";
+		DBConnection conn = DBConnection.getDbCon();
+		
+		try {
+			ResultSet rs = conn.query(selectQuery);
+			while (rs.next()) {
+				StockQuote quote = new StockQuote();
+				quote.setSymbol(rs.getString("Symbol"));
+				quote.setDate(getDateFromString(rs.getString("date")));
+				quote.setOpenPrice(rs.getDouble("openPrice"));
+				quote.setClosePrice(rs.getDouble("closePrice"));
+				quote.setDayHigh(rs.getDouble("dayHigh"));
+				quote.setDayLow(rs.getDouble("dayLow"));
+				quote.setVolume(rs.getInt("volume"));
+				quote.setAdjClose(rs.getDouble("adjClose"));
+				stocksList.add(quote);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return stocksList;
 	}
 }
